@@ -250,14 +250,17 @@ abstract class VersionControlSystem {
     abstract fun isApplicableUrl(vcsUrl: String): Boolean
 
     /**
-     * Download the source code as specified by the VCS information.
+     * Download the source code as specified by the [vcs] information to [targetDir]. The package's [version] is used to
+     * determine a possible fallback revision. If [recursive] is true, any nested repositories (like Git submodules or
+     * Mercurial subrepositories) are downloaded, too. [allowMovingRevisions] toggles whether symbolic names for which
+     * the revision they point might change are accepted or not.
      *
      * @return An object describing the downloaded working tree.
      *
      * @throws DownloadException In case the download failed.
      */
-    abstract fun download(vcs: VcsInfo, version: String, targetDir: File, allowMovingRevisions: Boolean = false)
-            : WorkingTree
+    abstract fun download(vcs: VcsInfo, version: String, targetDir: File, recursive: Boolean = true,
+            allowMovingRevisions: Boolean = false): WorkingTree
 
     /**
      * Check whether the given [revision] is likely to name a fixed revision that does not move.
